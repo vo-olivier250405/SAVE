@@ -66,6 +66,10 @@ class FightMenu:
         """
         self.display.fill("black")
         [case.render(self.display) for case in self.cases]
+        self.cases[self.props["index"]].is_current = True
+        for i in range(len(self.cases)):
+            if i != self.props["index"]:
+                self.cases[i].is_current = False
         self.cursor.render(self.display)
 
     def update(self):
