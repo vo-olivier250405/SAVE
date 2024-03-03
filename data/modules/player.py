@@ -40,5 +40,5 @@ class Player(pg.sprite.Sprite):
             surface (_type_): _description_
             update_rect (_type_): _description_
         """
-        self.movements()
+        # self.movements()
         update_rect.append(surface.blit(self.vals["image"], self.rect))

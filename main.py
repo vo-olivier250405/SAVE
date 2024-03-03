@@ -1,55 +1,52 @@
-import pygame as pg
-from os import system
-from data.modules.constants import COLORS, DIMENSIONS
-from data.modules.player import Player
+import pygame
+from data.modules.Fight import Fight
 
-pg.init()
+from data.modules.GameStateManager import GameStateManager
 
-
-def collision(sprite1, sprite2) -> bool:
-    """_summary_
-
-    Args:
-        sprite1 (_type_): _description_
-        sprite2 (_type_): _description_
-
-    Returns:
-        bool: _description_
-    """
-    return pg.sprite.collide_mask(sprite1, sprite2)
+SCREEN_PROPS = [1280, 720]
+FPS = 60
 
 
-test: bool = True
-clock = pg.time.Clock()
-update_rect = []
-display = pg.display
-display.set_caption("Save v.1.0.0")
-surface = display.set_mode(DIMENSIONS)
+class Game:
+    def __init__(self) -> None:
+        pygame.init()
+        self.screen = pygame.display.set_mode(SCREEN_PROPS)
+        self.clock = pygame.time.Clock()
 
-rectangle_props = {"x": 400, "y": 200}
-turn_is_ended = False
+        self.gameStateManager = GameStateManager("start")
+        self.start = Start(self.screen, self.gameStateManager)
+        self.fight = Fight(self.screen, self.gameStateManager)
 
-player = Player(
-    pos={"x": rectangle_props["x"] * 1.25, "y": rectangle_props["y"] * 2.5})
+        self.states = {"start": self.start, "fight": self.fight}
+
+    def run(self):
+        test = True
+        while test:
+            actions = pygame.event.get()
+            for event in actions:
+                if event.type == pygame.QUIT:
+                    test = False
+                    pygame.quit()
+
+                if event.type == pygame.KEYDOWN:
+                    self.gameStateManager.set_current_state("fight")
+                    if event.key == pygame.K_ESCAPE:
+                        self.gameStateManager.set_current_state("start")
+
+            # get the key returned by the gameStateManager
+            self.states[self.gameStateManager.get_current_state()].run(actions)
+            pygame.display.update()
+            self.clock.tick(FPS)
 
 
-while test:
-    update_rect.append(pg.draw.rect(surface, COLORS["black"],
-                                    (0, 0, DIMENSIONS[0], DIMENSIONS[1])))
-    update_rect.append(pg.draw.rect(
-        surface, COLORS["white"], ((DIMENSIONS[0] - rectangle_props["x"]) // 2, DIMENSIONS[1] - rectangle_props["y"] - 100, rectangle_props["x"], rectangle_props["y"]), 7))
-    dt = clock.tick(60) / 1000.0
-    player.update(surface=surface, update_rect=update_rect)
+class Start:
+    def __init__(self, display, gameStateManager) -> None:
+        self.display = display
+        self.gameStateManager = gameStateManager
 
-    for event in pg.event.get():
-        if event.type == pg.QUIT:
-            test = False
-        if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
-            turn_is_ended = True
+    def run(self, _actions):
+        self.display.fill("red")
 
-    if rectangle_props["x"] <= 600 and turn_is_ended:
-        rectangle_props["x"] += 10
-    if rectangle_props["x"] > 400 and not turn_is_ended:
-        rectangle_props["x"] -= 10
-    pg.display.update(update_rect)
-    update_rect = []
+
+if __name__ == "__main__":
+    Game().run()
