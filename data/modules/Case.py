@@ -1,16 +1,20 @@
-import pygame as pg
+import pygame
 
 from data.loaders.textures_loader import GFX
 
 
-class Case():
+class Case:
     def __init__(self, pos) -> None:
-        self.init_dict(pos)
+        self.x = pos[0]
+        self.y = pos[1]
 
-    def init_dict(self, pos):
-        self.vals = {"image": GFX["case"]}
-        self.rect = self.vals["image"].get_rect()
-        self.rect = pos
+    def render(self, display):
+        """_summary_
+        """
+        #  pygame.draw.rect(display, "white", (self.x, self.y, 200, 100))
+        pygame.draw.rect(display, "white", (self.x, self.y, 200, 100), 5)
 
-    def log_utility(self, utility):
-        print(utility)
+    def update(self):
+        """_summary_
+        """
+        pass

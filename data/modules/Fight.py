@@ -1,5 +1,6 @@
 import pygame
 from data.loaders.textures_loader import GFX
+from data.modules.Case import Case
 from data.modules.Cursor import Cursor
 from data.modules.FightStateManager import FightStateManager
 
@@ -45,6 +46,15 @@ class FightMenu:
         }
         self.menu_options = {0: "fight", 1: "act", 2: "items", 3: "mercy"}
         self.cursor = Cursor(self.props["index"], self.props["height"] - 150)
+        self.init_cases()
+
+    def init_cases(self):
+        """_summary_
+        """
+        self.cases = []
+        for i in range(4):
+            self.cases.append(
+                Case(pos=[i * self.props["width"] // 4 + 50, self.props["height"] - 150]))
 
     def run(self, _actions=None):
         self.update_events(actions=_actions)
@@ -55,16 +65,16 @@ class FightMenu:
         """_summary_
         """
         self.display.fill("black")
-        for i in range(4):
-            pygame.draw.rect(self.display, "white",
-                             (i * self.props["width"] // 4 + 50, self.props["height"] - 150, 200, 100))
+        [case.render(self.display) for case in self.cases]
         self.cursor.render(self.display)
 
     def update(self):
         """_summary_
         """
-        x = self.props["index"] * self.props["width"] // 4
-        self.cursor.update(x, self.props["height"] - 150)
+        x = self.cases[self.props["index"]].x + 20
+        y = self.cases[self.props["index"]].y + \
+            50 - self.cursor.image.get_height() // 2
+        self.cursor.update(x, y)
 
     def update_events(self, actions):
         """_summary_
