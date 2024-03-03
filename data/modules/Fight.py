@@ -47,21 +47,14 @@ class FightMenu:
         self.cursor = Cursor(self.props["index"], self.props["height"] - 150)
 
     def run(self, _actions=None):
-
-        self.display.fill("black")
-        self.render()
+        self.update_events(actions=_actions)
         self.update()
-        for event in _actions:
-            if event.type == pygame.KEYDOWN:
-                if event.key in [pygame.K_RIGHT, pygame.K_LEFT]:
-                    self.props["index"] = (
-                        self.props["index"] + {pygame.K_RIGHT: 1, pygame.K_LEFT: -1}[event.key]) % len(self.menu_options)
-                elif event.key == pygame.K_RETURN:
-                    print(self.menu_options[self.props["index"]])
+        self.render()
 
     def render(self):
         """_summary_
         """
+        self.display.fill("black")
         for i in range(4):
             pygame.draw.rect(self.display, "white",
                              (i * self.props["width"] // 4 + 50, self.props["height"] - 150, 200, 100))
@@ -72,3 +65,17 @@ class FightMenu:
         """
         x = self.props["index"] * self.props["width"] // 4
         self.cursor.update(x, self.props["height"] - 150)
+
+    def update_events(self, actions):
+        """_summary_
+
+        Args:
+            actions (_type_): _description_
+        """
+        for event in actions:
+            if event.type == pygame.KEYDOWN:
+                if event.key in [pygame.K_RIGHT, pygame.K_LEFT]:
+                    self.props["index"] = (
+                        self.props["index"] + {pygame.K_RIGHT: 1, pygame.K_LEFT: -1}[event.key]) % len(self.menu_options)
+                elif event.key == pygame.K_RETURN:
+                    print(self.menu_options[self.props["index"]])
