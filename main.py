@@ -23,6 +23,10 @@ class Game:
         test = True
         while test:
             actions = pygame.event.get()
+            # get the key returned by the gameStateManager
+            self.states[self.gameStateManager.get_current_state()].run(actions)
+            pygame.display.update()
+            self.clock.tick(FPS)
             for event in actions:
                 if event.type == pygame.QUIT:
                     test = False
@@ -32,11 +36,6 @@ class Game:
                     self.gameStateManager.set_current_state("fight")
                     if event.key == pygame.K_ESCAPE:
                         self.gameStateManager.set_current_state("start")
-
-            # get the key returned by the gameStateManager
-            self.states[self.gameStateManager.get_current_state()].run(actions)
-            pygame.display.update()
-            self.clock.tick(FPS)
 
 
 class Start:
