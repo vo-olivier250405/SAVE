@@ -27,9 +27,21 @@ class Battle:
         print("We are in battle phase")
         self.display = display
         self.fightStateManager = fightStateManager
+        self.props = {
+            "width": self.display.get_width(),
+            "height": self.display.get_height(),
+            "menu_options": {0: "fight", 1: "action", 2: "items", 3: "mercy"}
+        }
+        self.cases = []
+        for i in range(4):
+            pos = [i * self.props["width"] // 4 +
+                   50, self.props["height"] - 150]
+            name = self.props["menu_options"][i].upper()
+            self.cases.append(Case(pos=pos, name=name))
 
     def run(self, _actions):
-        self.display.fill("green")
+        self.display.fill("black")
+        [case.render(self.display) for case in self.cases]
 
         # self.fightStateManager.set_new_state("fightMenu")
 
