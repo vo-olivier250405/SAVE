@@ -36,6 +36,7 @@ class Game:
                     self.gameStateManager.set_current_state("fight")
                     if event.key == pygame.K_ESCAPE:
                         self.gameStateManager.set_current_state("start")
+                        self.fight = Fight(self.screen, self.gameStateManager)
 
 
 class Start:

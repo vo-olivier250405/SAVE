@@ -18,7 +18,7 @@ class Fight:
         self.states[self.fightStateManager.get_current_state()].run(_actions)
         for event in _actions:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_z:
-                print("here")
+
                 self.fightStateManager.set_new_state("battle")
 
 
@@ -44,8 +44,8 @@ class FightMenu:
             "height": self.display.get_height(),
             "index": 0,
         }
-        self.menu_options = {0: "fight", 1: "act", 2: "items", 3: "mercy"}
-        self.cursor = Cursor(self.props["index"], self.props["height"] - 150)
+        self.menu_options = {0: "fight", 1: "action", 2: "items", 3: "mercy"}
+        self.cursor = Cursor(0, self.props["height"] - 150)
         self.init_cases()
 
     def init_cases(self):
@@ -54,7 +54,7 @@ class FightMenu:
         self.cases = []
         for i in range(4):
             self.cases.append(
-                Case(pos=[i * self.props["width"] // 4 + 50, self.props["height"] - 150]))
+                Case(pos=[i * self.props["width"] // 4 + 50, self.props["height"] - 150], name=self.menu_options[i].upper()))
 
     def run(self, _actions=None):
         self.update_events(actions=_actions)
