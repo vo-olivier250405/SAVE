@@ -53,8 +53,10 @@ class FightMenu:
         """
         self.cases = []
         for i in range(4):
-            self.cases.append(
-                Case(pos=[i * self.props["width"] // 4 + 50, self.props["height"] - 150], name=self.menu_options[i].upper()))
+            pos = [i * self.props["width"] // 4 +
+                   50, self.props["height"] - 150]
+            name = self.menu_options[i].upper()
+            self.cases.append(Case(pos=pos, name=name))
 
     def run(self, _actions=None):
         self.update_events(actions=_actions)
@@ -89,7 +91,8 @@ class FightMenu:
         for event in actions:
             if event.type == pygame.KEYDOWN:
                 if event.key in [pygame.K_RIGHT, pygame.K_LEFT]:
+                    choice = {pygame.K_RIGHT: 1, pygame.K_LEFT: -1}[event.key]
                     self.props["index"] = (
-                        self.props["index"] + {pygame.K_RIGHT: 1, pygame.K_LEFT: -1}[event.key]) % len(self.menu_options)
+                        self.props["index"] + choice) % len(self.menu_options)
                 elif event.key == pygame.K_RETURN:
                     print(self.menu_options[self.props["index"]])
